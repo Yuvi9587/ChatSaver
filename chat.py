@@ -96,7 +96,7 @@ def generate_docx(messages, output_file):
             for part in parts:
                 if part[0] == 'heading':
                     text, level = part[1], part[2]
-                    heading_style = f'Heading {min(level, 3)}'  # Use Heading 1-3
+                    heading_style = f'Heading {min(level, 3)}'  # Heading 1-3
                     para = doc.add_paragraph(text, style=heading_style)
                 elif part[0] == 'paragraph':
                     para = doc.add_paragraph(part[1])
@@ -104,7 +104,7 @@ def generate_docx(messages, output_file):
                     para = doc.add_paragraph(part[1], style='List Bullet')
                 elif part[0] == 'code':
                     add_code_block(doc, part[1])
-                    continue  # Code blocks already handle spacing
+                    continue  # Code block already handles spacing
 
                 para.paragraph_format.space_before = Pt(0)
                 para.paragraph_format.space_after = Pt(6)
@@ -112,8 +112,20 @@ def generate_docx(messages, output_file):
     doc.save(output_file)
     print(f"✅ Word document saved successfully to {output_file}")
 
-def generate_word_from_link(shared_link, output_path):
+def main():
+    shared_link = "https://chatgpt.com/share/680fa987-2d1c-8005-8a87-bb279c059d3e"  # Put your link here
+
+    output_folder = r"C:\Users\yuvi6\Downloads"  # Set your output folder
+    output_filename = "cod.docx"  # Set output filename
+    output_path = os.path.join(output_folder, output_filename)
+
     messages = fetch_chat_content(shared_link)
+
     if not messages:
-        raise Exception("No messages found or failed to fetch the conversation.")
+        print("No messages found or failed to fetch the conversation.")
+        return
+
     generate_docx(messages, output_path)
+
+if __name__ == "__main__":
+    main()
