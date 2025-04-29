@@ -9,7 +9,6 @@ from bs4 import BeautifulSoup
 import time
 import os
 
-# ----------------- FETCH CHAT --------------------
 def fetch_chat_content(shared_link, logger=print):
     logger("Setting up Chrome options...")
     chrome_options = Options()
@@ -42,7 +41,6 @@ def fetch_chat_content(shared_link, logger=print):
     driver.quit()
     return messages
 
-# ----------------- PARSE CHAT HTML --------------------
 def parse_html_content(html_content, logger=print):
     logger("Parsing HTML content...")
     soup = BeautifulSoup(html_content, 'html.parser')
@@ -71,7 +69,6 @@ def parse_html_content(html_content, logger=print):
                 elements.append(('table', table_data))
     return elements
 
-# ----------------- BUILD DOCX --------------------
 def add_code_block(doc, code_text, logger=print):
     logger("Adding code block...")
     p = doc.add_paragraph()
@@ -103,23 +100,20 @@ def add_table(doc, table_data, logger=print):
         for j, cell_text in enumerate(row):
             table.rows[i].cells[j].text = cell_text
 
-# ----------------- SAVE FILES --------------------
 def generate_docx(messages, output_file, logger=print):
     logger("Creating DOCX file...")
     doc = Document()
 
-    # Set narrow margins (0.5 inches on all sides)
     section = doc.sections[0]
-    section.top_margin = Pt(36)  # 0.5 inches (1 inch = 72 points, so 0.5 inches = 36 points)
+    section.top_margin = Pt(36)
     section.bottom_margin = Pt(36)
     section.left_margin = Pt(36)
     section.right_margin = Pt(36)
 
-    # Default style setup
     style = doc.styles['Normal']
     font = style.font
     font.name = 'Arial'
-    font.size = Pt(10)  # Slightly smaller font to avoid space issues
+    font.size = Pt(10) 
 
     for author, msg in messages:
         if author == "assistant":
