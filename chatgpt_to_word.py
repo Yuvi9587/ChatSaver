@@ -87,7 +87,7 @@ def add_code_block(doc, code_text, logger=print):
     code_paragraph._p.get_or_add_pPr().append(
         parse_xml(r'<w:shd {} w:fill="F7F7F8"/>'.format(nsdecls('w')))
     )
-
+ 
 def add_table(doc, table_data, logger=print):
     if not table_data:
         logger("No table data found.")
