@@ -1,83 +1,168 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox
+from tkinter import filedialog, messagebox, scrolledtext
+import threading
 import webbrowser
 import os
-from chatgpt_to_word import fetch_chat_content, generate_docx  # <-- Import your functions
+import time
+from chatgpt_to_word import fetch_chat_content, generate_docx
 
+# ----------------- FUNCTIONALITY --------------------
 def open_link(url):
-    webbrowser.open_new(url)
+    webbrowser.open_new_tab(url)
 
 def browse_folder():
     folder_selected = filedialog.askdirectory()
     if folder_selected:
         folder_var.set(folder_selected)
 
+def log_message(message):
+    log_text.config(state='normal')
+    log_text.insert(tk.END, message + "\n")
+    log_text.see(tk.END)
+    log_text.config(state='disabled')
+
 def download_chat():
+    thread = threading.Thread(target=run_download)
+    thread.start()
+
+spinner_symbols = ['|', '/', '-', '\\']
+
+def log_spinner_message(base_message, duration=2.0, interval=0.2):
+    """Display a spinner animation in the log."""
+    end_time = time.time() + duration
+    i = 0
+    while time.time() < end_time:
+        log_text.config(state='normal')
+        log_text.insert(tk.END, f"{base_message} {spinner_symbols[i % len(spinner_symbols)]}\n")
+        log_text.see(tk.END)
+        log_text.update()
+        time.sleep(interval)
+        log_text.delete("end-2l", "end-1l")
+        i += 1
+    log_text.config(state='disabled')
+
+def run_download():
     shared_link = link_entry.get().strip()
     output_folder = folder_var.get().strip()
     output_filename = filename_entry.get().strip()
 
+    log_message("[INFO] Preparing download session...")
+
     if not shared_link or not output_folder or not output_filename:
-        messagebox.showerror("Error", "Please fill all fields.")
+        messagebox.showerror("Input Error", "Please complete all fields before downloading.")
+        log_message("[ERROR] Missing required fields.")
         return
 
     if not output_filename.endswith(".docx"):
-        output_filename += ".docx"
+        output_filename += ".docx"  # Always save as .docx
 
     output_path = os.path.join(output_folder, output_filename)
 
     try:
+        log_message("[INFO] Establishing server connection...")
+        log_spinner_message("[CONNECTING] Waiting for server", duration=2)
+
+        log_message("[STEP] Verifying link...")
+        time.sleep(0.5)
+
+        log_message("[STEP] Checking server response...")
+        log_spinner_message("[WAIT] Server handshake", duration=3)
+
+        log_message(f"[STEP] Fetching chat from:\n{shared_link}")
+        log_spinner_message("[FETCHING] Downloading chat data", duration=4)
+
         messages = fetch_chat_content(shared_link)
+
         if not messages:
-            messagebox.showerror("Error", "No messages found or failed to fetch the conversation.")
+            messagebox.showerror("Download Error", "No chat data found. Please check the link.")
+            log_message("[ERROR] No messages extracted.")
             return
 
+        log_message("[STEP] Parsing conversation...")
+        time.sleep(0.5)
+
+        log_message("[STEP] Building Word document...")
+        log_spinner_message("[BUILDING] Assembling Word file", duration=2)
+
         generate_docx(messages, output_path)
-        messagebox.showinfo("Success", f"Word document saved to:\n{output_path}")
+
+        log_message(f"[SUCCESS] Chat saved successfully!")
+        log_message(f"[FILE] {output_path}")
+
+        messagebox.showinfo("Success", f"File saved to:\n{output_path}")
+
     except Exception as e:
-        messagebox.showerror("Error", f"Something went wrong:\n{str(e)}")
+        messagebox.showerror("Unexpected Error", f"An error occurred:\n{str(e)}")
+        log_message(f"[ERROR] {str(e)}")
 
-# ---------------- GUI Setup ----------------
+# ----------------- BUTTON STYLE --------------------
+def on_enter(event):
+    event.widget.config(bg="#1abc9c")
 
+def on_leave(event):
+    event.widget.config(bg="#16a085")
+
+def create_button(master, text, command):
+    button = tk.Button(master, text=text, command=command, bg="#16a085", fg="white",
+                       activebackground="#1abc9c", relief="flat", font=("Segoe UI", 10))
+    button.bind("<Enter>", on_enter)
+    button.bind("<Leave>", on_leave)
+    return button
+
+# ----------------- GUI --------------------
 root = tk.Tk()
-root.title("ChatGPT to Word Converter")
-root.geometry("500x400")
-root.resizable(False, False)
+root.title("ChatSaver - Export Chat to Word")
+root.geometry("900x700")
+root.configure(bg="#1e1e1e")
+root.attributes("-alpha", 0.0)
+root.resizable(True, True)
 
-title_label = tk.Label(root, text="ChatGPT to Word Downloader", font=("Arial", 16, "bold"))
-title_label.pack(pady=10)
+# Fade-in Animation
+def fade_in():
+    alpha = root.attributes("-alpha")
+    if alpha < 1.0:
+        alpha += 0.05
+        root.attributes("-alpha", alpha)
+        root.after(30, fade_in)
+fade_in()
 
-# Link Entry
-tk.Label(root, text="Paste Chat Link:").pack(anchor='w', padx=20)
-link_entry = tk.Entry(root, width=50)
-link_entry.pack(padx=20, pady=5)
+# ---------- HEADER ----------
+header = tk.Frame(root, bg="#0f111a", height=60)
+header.pack(fill="x")
+tk.Label(header, text="ChatSaver", font=("Segoe UI", 20, "bold"), fg="white", bg="#0f111a").pack(padx=10, pady=10, anchor="w")
 
-# Folder Selection
-tk.Label(root, text="Select Download Folder:").pack(anchor='w', padx=20)
-folder_frame = tk.Frame(root)
-folder_frame.pack(padx=20, pady=5, fill="x")
+# ---------- MAIN CONTENT ----------
+content = tk.Frame(root, bg="#1e1e1e")
+content.pack(padx=25, pady=20, fill="both", expand=True)
+
+# --- Chat Link Entry ---
+tk.Label(content, text="🔗 Chat Link:", font=("Segoe UI", 11, "bold"), fg="white", bg="#1e1e1e").pack(anchor="w", pady=(5, 2))
+link_entry = tk.Entry(content, bg="#2c2c2c", fg="white", insertbackground="white", relief="flat")
+link_entry.pack(fill="x", pady=(0, 10), expand=True)
+
+# --- Output Folder Selection ---
+tk.Label(content, text="📁 Output Folder:", font=("Segoe UI", 11, "bold"), fg="white", bg="#1e1e1e").pack(anchor="w", pady=(10, 2))
+folder_frame = tk.Frame(content, bg="#1e1e1e")
+folder_frame.pack(fill='x', pady=(0, 10))
 folder_var = tk.StringVar()
-folder_entry = tk.Entry(folder_frame, textvariable=folder_var, width=38)
-folder_entry.pack(side="left", fill="x", expand=True)
-browse_button = tk.Button(folder_frame, text="Browse", command=browse_folder)
+folder_entry = tk.Entry(folder_frame, textvariable=folder_var, bg="#2c2c2c", fg="white", insertbackground="white", relief="flat")
+folder_entry.pack(side="left", fill="x", expand=True, padx=(0, 5))
+browse_button = create_button(folder_frame, "Browse", browse_folder)
 browse_button.pack(side="right")
 
-# File Name
-tk.Label(root, text="Enter File Name (without .docx):").pack(anchor='w', padx=20)
-filename_entry = tk.Entry(root, width=50)
-filename_entry.pack(padx=20, pady=5)
+# --- File Name Entry ---
+tk.Label(content, text="📝 File Name (.docx):", font=("Segoe UI", 11, "bold"), fg="white", bg="#1e1e1e").pack(anchor="w", pady=(10, 2))
+filename_entry = tk.Entry(content, bg="#2c2c2c", fg="white", insertbackground="white", relief="flat")
+filename_entry.pack(fill="x", pady=(0, 10), expand=True)
 
-# Download Button
-download_button = tk.Button(root, text="Download Chat", command=download_chat, bg="#4CAF50", fg="white", font=("Arial", 12))
-download_button.pack(pady=20)
+# --- Download Button ---
+download_button = create_button(content, "⬇️ Download Chat", download_chat)
+download_button.config(font=("Segoe UI", 12, "bold"))
+download_button.pack(pady=10)
 
-# Social Media Links
-social_frame = tk.Frame(root)
-social_frame.pack(pady=10)
-
-tk.Label(social_frame, text="Follow me: ").pack(side="left")
-tk.Button(social_frame, text="GitHub", command=lambda: open_link("https://github.com/Yuvi9587")).pack(side="left", padx=5)
-tk.Button(social_frame, text="Instagram", command=lambda: open_link("https://www.instagram.com/_yuvraj_panwar")).pack(side="left", padx=5)
-tk.Button(social_frame, text="Gmail", command=lambda: open_link("https://mail.google.com/mail/u/8/#sent?compose=jrjtXMncShVfPFmBdSKZNVPLxJbXSQXZfNLbhcQMDmHmWjBMlJMgzNMvQMldtvCcBPGkvSGf")).pack(side="left", padx=5)
+# --- Log Section ---
+tk.Label(content, text="🧾 Process Log:", font=("Segoe UI", 11, "bold"), fg="white", bg="#1e1e1e").pack(anchor="w", pady=(20, 2))
+log_text = scrolledtext.ScrolledText(content, height=10, state='disabled', bg="#121212", fg="white", insertbackground="white", relief="flat")
+log_text.pack(fill='both', expand=True, pady=(0, 10))
 
 root.mainloop()
