@@ -6,6 +6,14 @@ import os
 import time
 from chatgpt_to_word import fetch_chat_content, generate_docx
 
+# ----------------- GUI INITIALIZATION --------------------
+root = tk.Tk()
+root.title("ChatSaver - Export Chat to Word")
+root.geometry("900x700")
+root.configure(bg="#1e1e1e")
+root.attributes("-alpha", 0.0)
+root.resizable(True, True)
+
 # ----------------- FUNCTIONALITY --------------------
 def open_link(url):
     webbrowser.open_new_tab(url)
@@ -28,7 +36,6 @@ def download_chat():
 spinner_symbols = ['|', '/', '-', '\\']
 
 def log_spinner_message(base_message, duration=2.0, interval=0.2):
-    """Display a spinner animation in the log."""
     end_time = time.time() + duration
     i = 0
     while time.time() < end_time:
@@ -54,7 +61,7 @@ def run_download():
         return
 
     if not output_filename.endswith(".docx"):
-        output_filename += ".docx"  # Always save as .docx
+        output_filename += ".docx"
 
     output_path = os.path.join(output_folder, output_filename)
 
@@ -109,15 +116,7 @@ def create_button(master, text, command):
     button.bind("<Leave>", on_leave)
     return button
 
-# ----------------- GUI --------------------
-root = tk.Tk()
-root.title("ChatSaver - Export Chat to Word")
-root.geometry("900x700")
-root.configure(bg="#1e1e1e")
-root.attributes("-alpha", 0.0)
-root.resizable(True, True)
-
-# Fade-in Animation
+# ----------------- FADE-IN ANIMATION --------------------
 def fade_in():
     alpha = root.attributes("-alpha")
     if alpha < 1.0:
@@ -165,4 +164,5 @@ tk.Label(content, text="🧾 Process Log:", font=("Segoe UI", 11, "bold"), fg="w
 log_text = scrolledtext.ScrolledText(content, height=10, state='disabled', bg="#121212", fg="white", insertbackground="white", relief="flat")
 log_text.pack(fill='both', expand=True, pady=(0, 10))
 
+# ----------------- RUN APP --------------------
 root.mainloop()
