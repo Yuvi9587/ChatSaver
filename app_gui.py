@@ -6,7 +6,6 @@ import os
 import time
 from chatgpt_to_word import fetch_chat_content, generate_docx
 
-# ----------------- GUI INITIALIZATION --------------------
 root = tk.Tk()
 root.title("ChatSaver - Export Chat to Word")
 root.geometry("900x700")
@@ -14,7 +13,6 @@ root.configure(bg="#1e1e1e")
 root.attributes("-alpha", 0.0)
 root.resizable(True, True)
 
-# ----------------- FUNCTIONALITY --------------------
 def open_link(url):
     webbrowser.open_new_tab(url)
 
@@ -102,7 +100,6 @@ def run_download():
         messagebox.showerror("Unexpected Error", f"An error occurred:\n{str(e)}")
         log_message(f"[ERROR] {str(e)}")
 
-# ----------------- BUTTON STYLE --------------------
 def on_enter(event):
     event.widget.config(bg="#1abc9c")
 
@@ -116,7 +113,6 @@ def create_button(master, text, command):
     button.bind("<Leave>", on_leave)
     return button
 
-# ----------------- FADE-IN ANIMATION --------------------
 def fade_in():
     alpha = root.attributes("-alpha")
     if alpha < 1.0:
@@ -125,21 +121,17 @@ def fade_in():
         root.after(30, fade_in)
 fade_in()
 
-# ---------- HEADER ----------
 header = tk.Frame(root, bg="#0f111a", height=60)
 header.pack(fill="x")
 tk.Label(header, text="ChatSaver", font=("Segoe UI", 20, "bold"), fg="white", bg="#0f111a").pack(padx=10, pady=10, anchor="w")
 
-# ---------- MAIN CONTENT ----------
 content = tk.Frame(root, bg="#1e1e1e")
 content.pack(padx=25, pady=20, fill="both", expand=True)
 
-# --- Chat Link Entry ---
 tk.Label(content, text="🔗 Chat Link:", font=("Segoe UI", 11, "bold"), fg="white", bg="#1e1e1e").pack(anchor="w", pady=(5, 2))
 link_entry = tk.Entry(content, bg="#2c2c2c", fg="white", insertbackground="white", relief="flat")
 link_entry.pack(fill="x", pady=(0, 10), expand=True)
 
-# --- Output Folder Selection ---
 tk.Label(content, text="📁 Output Folder:", font=("Segoe UI", 11, "bold"), fg="white", bg="#1e1e1e").pack(anchor="w", pady=(10, 2))
 folder_frame = tk.Frame(content, bg="#1e1e1e")
 folder_frame.pack(fill='x', pady=(0, 10))
@@ -149,30 +141,26 @@ folder_entry.pack(side="left", fill="x", expand=True, padx=(0, 5))
 browse_button = create_button(folder_frame, "Browse", browse_folder)
 browse_button.pack(side="right")
 
-# --- File Name Entry ---
 tk.Label(content, text="📝 File Name (.docx):", font=("Segoe UI", 11, "bold"), fg="white", bg="#1e1e1e").pack(anchor="w", pady=(10, 2))
 filename_entry = tk.Entry(content, bg="#2c2c2c", fg="white", insertbackground="white", relief="flat")
 filename_entry.pack(fill="x", pady=(0, 10), expand=True)
 
-# --- Download Button ---
 download_button = create_button(content, "⬇️ Download Chat", download_chat)
 download_button.config(font=("Segoe UI", 12, "bold"))
 download_button.pack(pady=10)
 
-# --- Log Section ---
 tk.Label(content, text="🧾 Process Log:", font=("Segoe UI", 11, "bold"), fg="white", bg="#1e1e1e").pack(anchor="w", pady=(20, 2))
 log_text = scrolledtext.ScrolledText(content, height=10, state='disabled', bg="#121212", fg="white", insertbackground="white", relief="flat")
 log_text.pack(fill='both', expand=True, pady=(0, 10))
 
-# ---------- Social Buttons (Bottom Right Corner) ----------
 social_frame = tk.Frame(root, bg="#1e1e1e")
-social_frame.place(relx=1.0, rely=1.0, anchor="se", x=-10, y=-10)  # bottom-right corner with padding
+social_frame.place(relx=1.0, rely=1.0, anchor="se", x=-10, y=-10)  
 
 def open_instagram():
-    open_link("https://www.instagram.com/_yuvraj_panwar/")  # replace with your actual link
+    open_link("https://www.instagram.com/_yuvraj_panwar/") 
 
 def open_github():
-    open_link("https://github.com/Yuvi9587")  # replace with your actual link
+    open_link("https://github.com/Yuvi9587") 
 
 insta_button = create_button(social_frame, "📷 Instagram", open_instagram)
 insta_button.pack(side="left", padx=(0, 10))
@@ -180,5 +168,4 @@ insta_button.pack(side="left", padx=(0, 10))
 github_button = create_button(social_frame, "🐙 GitHub", open_github)
 github_button.pack(side="left")
 
-# ----------------- RUN APP --------------------
 root.mainloop()
