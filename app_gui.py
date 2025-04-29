@@ -164,5 +164,21 @@ tk.Label(content, text="🧾 Process Log:", font=("Segoe UI", 11, "bold"), fg="w
 log_text = scrolledtext.ScrolledText(content, height=10, state='disabled', bg="#121212", fg="white", insertbackground="white", relief="flat")
 log_text.pack(fill='both', expand=True, pady=(0, 10))
 
+# ---------- Social Buttons (Bottom Right Corner) ----------
+social_frame = tk.Frame(root, bg="#1e1e1e")
+social_frame.place(relx=1.0, rely=1.0, anchor="se", x=-10, y=-10)  # bottom-right corner with padding
+
+def open_instagram():
+    open_link("https://www.instagram.com/_yuvraj_panwar/")  # replace with your actual link
+
+def open_github():
+    open_link("https://github.com/Yuvi9587")  # replace with your actual link
+
+insta_button = create_button(social_frame, "📷 Instagram", open_instagram)
+insta_button.pack(side="left", padx=(0, 10))
+
+github_button = create_button(social_frame, "🐙 GitHub", open_github)
+github_button.pack(side="left")
+
 # ----------------- RUN APP --------------------
 root.mainloop()
