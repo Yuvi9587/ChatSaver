@@ -38,7 +38,7 @@ Note: The executable (.exe) version is available via GitHub Releases. It is not 
 ### Option 1: Use the Executable (No Python Required)
 
 1. Go to the [Releases page](https://github.com/Yuvi9587/ChatSaver/releases)
-2. Download the latest ChatGPTtoWord.exe  
+2. Download the latest ChatSaver.exe  
 3. Run the application  
 4. Paste your ChatGPT shared link and click the button to export  
 
