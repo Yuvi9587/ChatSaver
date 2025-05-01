@@ -1,103 +1,135 @@
-ChatGPT to Word - Export ChatGPT Shared Links to DOCX
-Welcome! 👋 This project helps you convert ChatGPT shared conversations into a clean and readable Word (.docx) document, preserving:
+# ChatGPT to Word  
+**Export ChatGPT Shared Links to DOCX**
 
-✅ Headings
+This project allows you to convert shared ChatGPT conversations into well-formatted Word (.docx) documents. It preserves:
 
-✅ Paragraphs
+- Headings  
+- Paragraphs  
+- Lists  
+- Code blocks  
+- Tables  
 
-✅ Lists
+Use this tool to archive, print, or share ChatGPT conversations in a clean and professional format.
 
-✅ Code blocks
+---
 
-✅ Tables
+## Features
 
-Use it to archive, print, or share ChatGPT conversations in a professional format!
+- Converts ChatGPT shared links to Word documents  
+- Clean formatting using styles  
+- Easy-to-use graphical interface  
+- Fully open and readable source code  
 
-📁 Project Files
+---
 
-File Name	             Description
-chat_to_word.py	         Core script that fetches the chat and builds the DOCX file
-app_gui.py	             GUI (Graphical User Interface) to make using the script easier
-ChatGPTtoWord.exe	     Compiled EXE version – for quick use without installing Python
+## Project Files
 
-💻 How to Use
-👉 Option 1: Use the EXE (No Python Needed)
-Download ChatGPTtoWord.exe
+| File Name         | Description                                      |
+|------------------|--------------------------------------------------|
+| chat_to_word.py   | Main script to fetch and convert conversations  |
+| app_gui.py        | GUI built with Tkinter for easier interaction   |
 
-Double-click and run it 🖱️
+Note: The executable (.exe) version is available via GitHub Releases. It is not included in the repository directly.
 
-Paste your ChatGPT shared link, click a button, and done! 🎉
+---
 
-🛡️ Is the EXE safe?
-Yes! The .exe was generated using pyinstaller from this exact source code.
-Still, if you're unsure or don't trust random executables (totally fair!), use Option 2 below.
+## How to Use
 
-👉 Option 2: Use the Python Scripts (For Full Transparency)
-1️⃣ Clone the repo
-bash
-Copy
-Edit
+### Option 1: Use the Executable (No Python Required)
+
+1. Go to the [Releases page](https://github.com/Yuvi9587/ChatSaver/releases)
+2. Download the latest ChatGPTtoWord.exe  
+3. Run the application  
+4. Paste your ChatGPT shared link and click the button to export  
+
+The executable was built from this exact source using PyInstaller. For added transparency, you can also use the Python version described below.
+
+---
+
+### Option 2: Run with Python
+
+**Step 1: Clone the repository**
+
+```
 git clone https://github.com/Yuvi9587/ChatSaver
 cd ChatGPT-to-Word
-2️⃣ Install dependencies
-Make sure you're using Python 3.8 or above.
+```
 
-You can install the required libraries with pip:
+**Step 2: Install the required dependencies**  
+Make sure you're using Python 3.8 or newer.
 
+You can install dependencies using:
+
+```
 pip install -r requirements.txt
-Or manually install them:
+```
 
+Or individually:
+
+```
 pip install selenium
 pip install beautifulsoup4
 pip install python-docx
-🧩 You'll also need Google Chrome and ChromeDriver for Selenium.
-Make sure chromedriver is in your system PATH or in the project directory.
-Download: https://chromedriver.chromium.org/downloads
+```
 
-3️⃣ Run the GUI app
+Make sure you have Google Chrome and ChromeDriver installed.  
+ChromeDriver should be in your system PATH or placed in the project directory.  
+You can download it from: https://chromedriver.chromium.org/downloads
 
+**Step 3: Launch the GUI**
+
+```
 python app_gui.py
+```
 
-🛠 How It Works
-chat_to_word.py:
-Uses Selenium to open the ChatGPT shared link in headless Chrome
+---
 
-Extracts the entire conversation using BeautifulSoup
+## How It Works
 
-Parses HTML elements: headings, paragraphs, lists, tables, code
+**chat_to_word.py**
 
-Creates a nicely formatted .docx file with python-docx
+- Opens the ChatGPT shared link in a headless Chrome browser using Selenium  
+- Extracts the entire conversation with BeautifulSoup  
+- Parses headings, paragraphs, lists, code blocks, and tables  
+- Generates a formatted Word document using python-docx  
 
-app_gui.py:
-Provides a simple GUI built with tkinter
+**app_gui.py**
 
-You just paste the link and click a button 💡
+- Provides a simple graphical interface using Tkinter  
+- Lets users export chats without using the command line  
 
-No command-line needed!
+---
 
-🧪 Tested On
-Windows 10/11
+## Compatibility and Testing
 
-Python 3.8–3.12
+- Windows 10 and 11  
+- Python versions 3.8 through 3.12  
+- Chrome version 120 and above  
+- Works with the latest ChatGPT shared link format  
 
-Chrome v120+
+---
 
-Works with newer ChatGPT shared link formats
+## Planned Improvements
 
-📎 To-Do / Improvements
- Dark mode GUI 🌙
+- Dark mode for the GUI  
+- Support for embedded images  
+- Option to export as PDF  
+- Ability to save multiple conversations at once  
 
- Support for embedded images
+---
 
- PDF export option
+## License
+This project does not currently use an open source license.  
+---
 
- Save multiple conversations at once
+## Credits
 
-📌 GitHub Repo
-[👉[ GITHUB LINK HERE](https://github.com/Yuvi9587) 👈]
- 
- 
- 
-🙌 Credits
-Made with ☕, selenium, and lots of ChatGPT chats.
-Feel free to open issues or contribute with PRs!
+Developed using Selenium, BeautifulSoup, python-docx, and many hours of ChatGPT conversations.  
+Contributions and feedback are welcome through GitHub issues or pull requests.
+
+---
+
+## Repository
+
+GitHub: https://github.com/Yuvi9587/ChatSaver
+---
