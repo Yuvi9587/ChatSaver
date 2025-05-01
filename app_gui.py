@@ -157,7 +157,7 @@ social_frame = tk.Frame(root, bg="#1e1e1e")
 social_frame.place(relx=1.0, rely=1.0, anchor="se", x=-10, y=-10)  
 
 def open_instagram():
-    open_link("https://www.instagram.com/_yuvraj_panwar/") 
+    open_link("https://www.instagram.com/uvi.arts/") 
 
 def open_github():
     open_link("https://github.com/Yuvi9587") 
